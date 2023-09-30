@@ -1,6 +1,7 @@
 ﻿using example_one_model_dapper.user.model.interfaces;
 using example_one_model_dapper.user.repository.interfaces;
 using example_one_model_dapper.user.repository.testing;
+using example_one_model_dapper.user.service.exceptions;
 using example_one_model_depper.user.model;
 using System;
 using System.Collections.Generic;
@@ -86,7 +87,21 @@ namespace test_example_one_model_dapper.service
         }
 
         [Fact]
-        public void TestGetUserById()
+        public void TestGetUserById_UserDoesNotExist_ThrowsUserDoesNotExistException()
+        {
+            // Arrange
+            User user = IUserBuilder.BuildUser()
+                .Id(1000)
+                .Username("test")
+                .Email("test")
+                .Password("test");
+
+            // Assert
+            Assert.Throws<UserDoesNotExist>(() => repository.GetUserById(user.GetId()));
+        }
+
+        [Fact]
+        public void TestGetUserById_UserExists_ReturnsUser()
         {
             // Arrange
             User user = IUserBuilder.BuildUser()
@@ -107,7 +122,21 @@ namespace test_example_one_model_dapper.service
         }
 
         [Fact]
-        public void TestGetUserByUsername()
+        public void TestGetUserByUsername_UserDoesNotExist_ThrowsUserDoesNotExistException()
+        {
+            // Arrange
+            User user = IUserBuilder.BuildUser()
+                .Id(1000)
+                .Username("test")
+                .Email("test")
+                .Password("test");
+
+            // Assert
+            Assert.Throws<UserDoesNotExist>(() => repository.GetUserByUsername(user.GetUsername()));
+        }
+
+        [Fact]
+        public void TestGetUserByUsername_UserExists_ReturnsUser()
         {
             // Arrange
             User user = IUserBuilder.BuildUser()
@@ -128,7 +157,21 @@ namespace test_example_one_model_dapper.service
         }
 
         [Fact]
-        public void TestGetUserByEmail()
+        public void TestGetUserByEmail_UserDoesNotExist_ThrowsUserDoesNotExistException()
+        {
+            // Arrange
+            User user = IUserBuilder.BuildUser()
+                .Id(1000)
+                .Username("test")
+                .Email("test")
+                .Password("test");
+
+            // Assert
+            Assert.Throws<UserDoesNotExist>(() => repository.GetUserByEmail(user.GetEmail()));
+        }
+
+        [Fact]
+        public void TestGetUserByEmail_UserExists_ReturnsUser()
         {
             // Arrange
             User user = IUserBuilder.BuildUser()
