@@ -13,24 +13,19 @@ namespace example_one_model_dapper.data
     {
         public List<T> LoadData<T, U>(String sqlStatement, U parameters, String connectionString)
         {
-
             using (IDbConnection connection = new MySqlConnection(connectionString))
             {
                 List<T> rows = connection.Query<T>(sqlStatement, parameters).ToList();
 
                 return rows;
-
             }
         }
 
         public void SaveData<T>(String sqlStatement, T parameters, String connectionString)
         {
-
             using (IDbConnection connection = new MySqlConnection(connectionString))
             {
-
                 connection.Execute(sqlStatement, parameters);
-
             }
         }
 
