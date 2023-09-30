@@ -1,4 +1,4 @@
-﻿using example_one_model_dapper.user.model;
+﻿using example_one_model_dapper.user.model.interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
