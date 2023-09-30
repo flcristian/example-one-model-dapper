@@ -1,4 +1,4 @@
-/*using example_one_model_dapper.user.model.interfaces;
+using example_one_model_dapper.user.model.interfaces;
 using example_one_model_dapper.user.repository.interfaces;
 using example_one_model_dapper.user.repository.testing;
 using example_one_model_dapper.user.service.interfaces;
@@ -31,9 +31,10 @@ namespace test_example_one_model_dapper.service
 
             // Assert
             Assert.Throws<IdAlreadyUsed>(() => service.AddUser(add));
+            Assert.Single(repository.GetAllUsers());
 
             // Cleaning up
-            repository.DeleteUser(4);
+            repository.DeleteUser(user.GetId());
         }
 
         [Fact]
@@ -56,7 +57,7 @@ namespace test_example_one_model_dapper.service
             Assert.Throws<UsernameAlreadyUsed>(() => service.AddUser(add));
 
             // Cleaning up
-            repository.DeleteUser(4);
+            repository.DeleteUser(user.GetId());
         }
 
         [Fact]
@@ -98,7 +99,117 @@ namespace test_example_one_model_dapper.service
             Assert.Equal(count + 1, repository.GetAllUsers().Count());
 
             // Cleaning up
-            repository.DeleteUser(4);
+            repository.DeleteUser(user.GetId());
+        }
+
+        [Fact]
+        public void TestDeleteUser_UserDoesNotExist_ThrowsUserDoesNotExistException_DoesNotDeleteAnyUsers()
+        {
+            // Arrange
+            User user = IUserBuilder.BuildUser()
+                .Id(4)
+                .Username("radu")
+                .Email("radu@email.com")
+                .Password("radu");
+            User delete = IUserBuilder.BuildUser()
+                .Id(5)
+                .Username("test")
+                .Email("test")
+                .Password("test");
+            repository.AddUser(user);
+
+            // Assert
+            Assert.Throws<UserDoesNotExist>(() => service.DeleteUser(delete.GetId()));
+            Assert.Single(repository.GetAllUsers());
+
+            // Cleaning up
+            repository.DeleteUser(user.GetId());
+        }
+
+        [Fact]
+        public void TestDeleteUser_UserExists_DeletesUser()
+        {
+            // Arrange
+            User user = IUserBuilder.BuildUser()
+                .Id(4)
+                .Username("radu")
+                .Email("radu@email.com")
+                .Password("radu");
+            repository.AddUser(user);
+
+            // Assert
+            repository.DeleteUser(user.GetId());
+            Assert.Empty(repository.GetAllUsers());
+
+            // Cleaning up
+            repository.DeleteUser(user.GetId());
+        }
+
+        [Fact]
+        public void TestUpdateUser_UserDoesNotExist_ThrowsUserDoesNotExistException_DoesNotUpdateAnyUsers()
+        {
+            // Arrange
+            User user = IUserBuilder.BuildUser()
+                .Id(4)
+                .Username("test")
+                .Email("test")
+                .Password("test");
+            User update = IUserBuilder.BuildUser()
+                .Id(4)
+                .Username("test")
+                .Email("test")
+                .Password("test");
+
+            // Assert
+            Assert.Throws<UserDoesNotExist>(() => service.UpdateUser(user));
+        }
+
+        [Fact]
+        public void TestUpdateUser_UserNotModified_ThrowsUserNotModifiedException_DoesNotUpdateUser()
+        {
+            // Arrange
+            User user = IUserBuilder.BuildUser()
+                .Id(4)
+                .Username("test")
+                .Email("test")
+                .Password("test");
+            User updated = IUserBuilder.BuildUser()
+                .Id(4)
+                .Username("test")
+                .Email("test")
+                .Password("test");
+            repository.AddUser(user);
+
+            // Assert
+            Assert.Throws<UserNotModified>(() => service.UpdateUser(updated));
+            Assert.Equal(user, repository.GetUserById(user.GetId()));
+
+            // Cleaning up
+            repository.DeleteUser(user.GetId());
+        }
+
+        [Fact]
+        public void TestUpdateUser_UserModifiedAndExists_ModifiesUser()
+        {
+            // Arrange
+            User user = IUserBuilder.BuildUser()
+                .Id(4)
+                .Username("test")
+                .Email("test")
+                .Password("test");
+            User updated = IUserBuilder.BuildUser()
+                .Id(4)
+                .Username("updated")
+                .Email("updated")
+                .Password("updated");
+            repository.AddUser(user);
+
+            // Assert
+            service.UpdateUser(updated);
+            Assert.Equal(updated, repository.GetUserById(user.GetId()));
+
+            // Cleaning up
+            repository.DeleteUser(user.GetId());
         }
     }
-}*/
+}

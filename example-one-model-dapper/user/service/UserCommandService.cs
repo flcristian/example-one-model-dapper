@@ -28,22 +28,35 @@ namespace example_one_model_dapper.user.service
 
         public void AddUser(User user)
         {
-            if (_repository.GetUserById(user.GetId()) != null) throw new IdAlreadyUsed("Id is already in use");
-            if (_repository.GetUserByUsername(user.GetUsername()) != null) throw new UsernameAlreadyUsed("Username is already in use");
-            if (_repository.GetUserByEmail(user.GetEmail()) != null) throw new EmailAlreadyUsed("Email is already used");
+            User id = null!, username = null!, email = null!;
+            try { id = _repository.GetUserById(user.GetId()); }
+            catch(UserDoesNotExist ex) { }
+
+            try { username = _repository.GetUserByUsername(user.GetUsername()); }
+            catch(UserDoesNotExist ex) { }
+
+            try { email = _repository.GetUserByEmail(user.GetEmail()); }
+            catch (UserDoesNotExist ex) { }
+
+            if (id != null) throw new IdAlreadyUsed("Id is already in use");
+            if (username != null) throw new UsernameAlreadyUsed("Username is already in use");
+            if (email != null) throw new EmailAlreadyUsed("Email is already used");
             _repository.AddUser(user);
         }
 
         public void DeleteUser(int id)
         {
-            if (_repository.GetUserById(id) == null) throw new UserDoesNotExist("User does not exist");
+            try { _repository.GetUserById(id); }
+            catch (UserDoesNotExist ex) { throw ex; }
             _repository.DeleteUser(id);
         }
 
         public void UpdateUser(User user)
         {
-            User check = _repository.GetUserById(user.GetId());
-            if (check == null) throw new UserDoesNotExist("User does not exist");
+            User check = null!;
+            try { check = _repository.GetUserById(user.GetId()); }
+            catch(UserDoesNotExist ex) { throw ex; }
+
             if (check.Equals(user)) throw new UserNotModified("User was not modified");
             _repository.UpdateUser(user);
         }
