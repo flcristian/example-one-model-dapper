@@ -8,7 +8,7 @@ using example_one_model_depper.user.model;
 
 namespace test_example_one_model_dapper.service
 {
-    public class UserCommandService
+    public class TestUserCommandService
     {
         IUserRepository repository = TestUserRepositorySingleton.Instance;
         IUserCommandService service = TestUserCommandServiceSingleton.Instance;
@@ -34,7 +34,7 @@ namespace test_example_one_model_dapper.service
             Assert.Single(repository.GetAllUsers());
 
             // Cleaning up
-            repository.DeleteUser(user.GetId());
+            repository.Clear();
         }
 
         [Fact]
@@ -57,7 +57,7 @@ namespace test_example_one_model_dapper.service
             Assert.Throws<UsernameAlreadyUsed>(() => service.AddUser(add));
 
             // Cleaning up
-            repository.DeleteUser(user.GetId());
+            repository.Clear();
         }
 
         [Fact]
@@ -80,7 +80,7 @@ namespace test_example_one_model_dapper.service
             Assert.Throws<EmailAlreadyUsed>(() => service.AddUser(add));
 
             // Cleaning up
-            repository.DeleteUser(user.GetId());
+            repository.Clear();
         }
 
         [Fact]
@@ -99,7 +99,7 @@ namespace test_example_one_model_dapper.service
             Assert.Equal(count + 1, repository.GetAllUsers().Count());
 
             // Cleaning up
-            repository.DeleteUser(user.GetId());
+            repository.Clear();
         }
 
         [Fact]
@@ -123,12 +123,13 @@ namespace test_example_one_model_dapper.service
             Assert.Single(repository.GetAllUsers());
 
             // Cleaning up
-            repository.DeleteUser(user.GetId());
+            repository.Clear();
         }
 
         [Fact]
         public void TestDeleteUser_UserExists_DeletesUser()
         {
+
             // Arrange
             User user = IUserBuilder.BuildUser()
                 .Id(4)
@@ -142,7 +143,7 @@ namespace test_example_one_model_dapper.service
             Assert.Empty(repository.GetAllUsers());
 
             // Cleaning up
-            repository.DeleteUser(user.GetId());
+            repository.Clear();
         }
 
         [Fact]
@@ -162,6 +163,9 @@ namespace test_example_one_model_dapper.service
 
             // Assert
             Assert.Throws<UserDoesNotExist>(() => service.UpdateUser(user));
+
+            // Cleaning up
+            repository.Clear();
         }
 
         [Fact]
@@ -185,7 +189,7 @@ namespace test_example_one_model_dapper.service
             Assert.Equal(user, repository.GetUserById(user.GetId()));
 
             // Cleaning up
-            repository.DeleteUser(user.GetId());
+            repository.Clear();
         }
 
         [Fact]
@@ -209,7 +213,7 @@ namespace test_example_one_model_dapper.service
             Assert.Equal(updated, repository.GetUserById(user.GetId()));
 
             // Cleaning up
-            repository.DeleteUser(user.GetId());
+            repository.Clear();
         }
     }
 }

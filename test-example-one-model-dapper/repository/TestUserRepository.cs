@@ -9,12 +9,33 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace test_example_one_model_dapper.service
+namespace test_example_one_model_dapper.repository
 {
     public class TestUserRepository
     {
         IUserRepository repository = TestUserRepositorySingleton.Instance;
-        
+
+        [Fact]
+        public void TestClear()
+        {
+            // Arrange
+            User user = IUserBuilder.BuildUser()
+                .Id(1000)
+                .Username("test")
+                .Email("test")
+                .Password("test");
+            repository.AddUser(user);
+
+            // Act
+            repository.Clear();
+
+            // Assert
+            Assert.Empty(repository.GetAllUsers());
+
+            // Cleaning up
+            repository.DeleteUser(user.GetId());
+        }
+
         [Fact]
         public void TestAddUser()
         {
@@ -35,7 +56,7 @@ namespace test_example_one_model_dapper.service
             Assert.Equal(user, repository.GetUserById(user.GetId()));
 
             // Cleaning up
-            repository.DeleteUser(user.GetId());
+            repository.Clear();
         }
 
         [Fact]
@@ -56,6 +77,9 @@ namespace test_example_one_model_dapper.service
             // Assert
             Assert.Equal(count - 1, repository.GetCount());
             Assert.DoesNotContain(user, repository.GetAllUsers());
+
+            // Cleaning up
+            repository.Clear();
         }
 
         [Fact]
@@ -83,7 +107,7 @@ namespace test_example_one_model_dapper.service
             Assert.Equal(updated, repository.GetUserById(user.GetId()));
 
             // Cleaning up
-            repository.DeleteUser(user.GetId());
+            repository.Clear();
         }
 
         [Fact]
@@ -95,6 +119,8 @@ namespace test_example_one_model_dapper.service
                 .Username("test")
                 .Email("test")
                 .Password("test");
+            // Making sure there are no users
+            repository.Clear();
 
             // Assert
             Assert.Throws<UserDoesNotExist>(() => repository.GetUserById(user.GetId()));
@@ -118,7 +144,7 @@ namespace test_example_one_model_dapper.service
             Assert.Equal(user, check);
 
             // Cleaning up
-            repository.DeleteUser(user.GetId());
+            repository.Clear();
         }
 
         [Fact]
@@ -130,6 +156,8 @@ namespace test_example_one_model_dapper.service
                 .Username("test")
                 .Email("test")
                 .Password("test");
+            // Making sure there are no users
+            repository.Clear();
 
             // Assert
             Assert.Throws<UserDoesNotExist>(() => repository.GetUserByUsername(user.GetUsername()));
@@ -153,7 +181,7 @@ namespace test_example_one_model_dapper.service
             Assert.Equal(user, check);
 
             // Cleaning up
-            repository.DeleteUser(user.GetId());
+            repository.Clear();
         }
 
         [Fact]
@@ -165,6 +193,8 @@ namespace test_example_one_model_dapper.service
                 .Username("test")
                 .Email("test")
                 .Password("test");
+            // Making sure there are no users
+            repository.Clear();
 
             // Assert
             Assert.Throws<UserDoesNotExist>(() => repository.GetUserByEmail(user.GetEmail()));
@@ -188,7 +218,7 @@ namespace test_example_one_model_dapper.service
             Assert.Equal(user, check);
 
             // Cleaning up
-            repository.DeleteUser(user.GetId());
+            repository.Clear();
         }
 
         [Fact]
@@ -210,7 +240,7 @@ namespace test_example_one_model_dapper.service
             Assert.Single(users);
 
             // Cleaning up
-            repository.DeleteUser(user.GetId());
+            repository.Clear();
         }
 
         [Fact]
@@ -237,8 +267,7 @@ namespace test_example_one_model_dapper.service
             Assert.Equal(2, count);
 
             // Cleaning up
-            repository.DeleteUser(user.GetId());
-            repository.DeleteUser(another.GetId());
+            repository.Clear();
         }
     }
 }

@@ -9,6 +9,7 @@ namespace example_one_model_dapper.user.repository.interfaces
 {
     public interface IUserRepository
     {
+        void Clear();
         void AddUser(User user);
         void UpdateUser(User user);
         void DeleteUser(int id);
