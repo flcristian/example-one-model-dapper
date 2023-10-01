@@ -39,7 +39,7 @@ namespace example_one_model_dapper.user.repository
 
         //Methods
 
-        public void Load()
+        private void Load()
         {
             List<User> list = GetAllUsers();
 
@@ -47,6 +47,13 @@ namespace example_one_model_dapper.user.repository
             {
                 _users.Add(user);
             }
+        }
+
+        public void Clear()
+        {
+            string sql = "delete from user;";
+
+            _dataAccess.SaveData(sql, new { }, _connectionString);
         }
         public void AddUser(User user)
         {
