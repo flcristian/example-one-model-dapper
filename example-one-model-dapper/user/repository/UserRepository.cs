@@ -1,13 +1,13 @@
 ﻿using example_one_model_dapper.data;
 using example_one_model_dapper.user.repository.interfaces;
 using example_one_model_dapper.user.service.exceptions;
-using example_one_model_depper.user.model;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using example_one_model_dapper.user.model;
 
 namespace example_one_model_dapper.user.repository
 {
@@ -57,13 +57,13 @@ namespace example_one_model_dapper.user.repository
         }
         public void AddUser(User user)
         {
-            string sql = "insert into user(_id,_username,_email,_password) values(@id,@username,@email,@password)";
+            string sql = "insert into user(id,username,email,password) values(@id,@username,@email,@password)";
 
             _dataAccess.SaveData(sql, new { id = user.GetId(), username = user.GetUsername(), email = user.GetEmail(), password = user.GetPassword() }, _connectionString);
         }
         public void DeleteUser(int id)
         {
-            string sql = "delete from user where _id=@id";
+            string sql = "delete from user where id=@id";
 
             _dataAccess.SaveData(sql, new { id }, _connectionString);
         }
@@ -75,7 +75,7 @@ namespace example_one_model_dapper.user.repository
         }
         public User GetUserById(int id)
         {
-            string sql = "select * from user where _id=@id";
+            string sql = "select * from user where id=@id";
 
             List<User> result = _dataAccess.LoadData<User, dynamic>(sql, new { id }, _connectionString);
             if (result.Count() < 1) throw new UserDoesNotExist("User does not exist");
@@ -83,7 +83,7 @@ namespace example_one_model_dapper.user.repository
         }
         public User GetUserByUsername(String username)
         {
-            string sql = "select * from user where _username=@username";
+            string sql = "select * from user where username=@username";
 
             List<User> result = _dataAccess.LoadData<User, dynamic>(sql, new { username }, _connectionString);
             if (result.Count() < 1) throw new UserDoesNotExist("User does not exist");
@@ -91,7 +91,7 @@ namespace example_one_model_dapper.user.repository
         }
         public User GetUserByEmail(String email)
         {
-            string sql = "select * from user where _email=@email";
+            string sql = "select * from user where email=@email";
 
             List<User> result = _dataAccess.LoadData<User, dynamic>(sql, new { email }, _connectionString);
             if (result.Count() < 1) throw new UserDoesNotExist("User does not exist");
@@ -99,14 +99,14 @@ namespace example_one_model_dapper.user.repository
         }
         public void UpdateUser(User user)
         {
-            string sql = "update user set _username=@username,_email=@email,_password=@password where _id=@id";
+            string sql = "update user set username=@username,email=@email,password=@password where id=@id";
 
             _dataAccess.SaveData(sql, new { id = user.GetId(), username = user.GetUsername(), email = user.GetEmail(), password = user.GetPassword() }, _connectionString);
         }
 
         public int GetCount()
         {
-            string sql = "select count(_id) from user;";
+            string sql = "select count(id) from user;";
 
             return _dataAccess.LoadData<int, dynamic>(sql, new { }, _connectionString)[0];
         }

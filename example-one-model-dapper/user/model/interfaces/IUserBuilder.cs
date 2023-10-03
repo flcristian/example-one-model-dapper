@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using example_one_model_depper.user.model;
+using example_one_model_dapper.user.model;
 
 namespace example_one_model_dapper.user.model.interfaces
 {
