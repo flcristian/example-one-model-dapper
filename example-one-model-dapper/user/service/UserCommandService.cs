@@ -3,7 +3,7 @@ using example_one_model_dapper.user.repository.interfaces;
 using example_one_model_dapper.user.repository.testing;
 using example_one_model_dapper.user.service.exceptions;
 using example_one_model_dapper.user.service.interfaces;
-using example_one_model_depper.user.model;
+using example_one_model_dapper.user.model;
 using System;
 using System.Collections.Generic;
 using System.Linq;

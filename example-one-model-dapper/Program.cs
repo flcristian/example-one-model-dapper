@@ -6,7 +6,7 @@ using example_one_model_dapper.user.repository.interfaces;
 using example_one_model_dapper.user.service;
 using example_one_model_dapper.user.service.interfaces;
 using example_one_model_dapper.user.service.testing;
-using example_one_model_depper.user.model;
+using example_one_model_dapper.user.model;
 using Microsoft.Extensions.Configuration;
 using MySql.Data.MySqlClient;
 using System.Data;
